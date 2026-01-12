@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.JWT_KEY;
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+  sameSite: "none",
   path: "/",
 };
 

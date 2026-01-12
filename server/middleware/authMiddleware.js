@@ -13,27 +13,24 @@ export const verifyToken = (req, res, next) => {
 
 
     // 🔐 SUPERADMIN PROTECTED ROUTES
-  
+
     if (
       base.includes("/api/superadmin") ||
       base.includes("/api/superabout") ||
       base.includes("/api/superhero") ||
       base.includes("/api/superadminservices") ||
       base.includes("/api/superadminproducts") ||
-      base.includes("/api/superadminenquiry")||
-      base.includes("/api/superadminfeedback")||
-      base.includes("/api/superadmincontact")||
-      base.includes("/api/superadminfooter")||
-      base.includes("/api/superadminnavbar")||
-      base.includes("/api/superadminepayment")||
+      base.includes("/api/superadminenquiry") ||
+      base.includes("/api/superadminfeedback") ||
+      base.includes("/api/superadmincontact") ||
+      base.includes("/api/superadminfooter") ||
+      base.includes("/api/superadminnavbar") ||
+      base.includes("/api/superadminepayment") ||
       base.includes("/api/superadminpaymentsetting")
     ) {
       token = req.cookies?.superToken;
       expectedRole = "superadmin";
-    }
-
-  
-    else if (
+    } else if (
       base.includes("/api/admin") ||
       base.includes("/api/about") ||
       base.includes("/api/navbar") ||
@@ -50,17 +47,15 @@ export const verifyToken = (req, res, next) => {
       // expectedRole = "admin";
       const authHeader = req.headers.authorization;
 
-if (authHeader && authHeader.startsWith("Bearer ")) {
-  token = authHeader.split(" ")[1];   
-} else {
-  token = req.cookies?.adminToken;   
-}
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        token = authHeader.split(" ")[1];
+      } else {
+        token = req.cookies?.adminToken;
+      }
 
-expectedRole = "admin";
+      expectedRole = "admin";
 
-    }
-
-    else {
+    } else {
       return next();
     }
 
@@ -69,7 +64,7 @@ expectedRole = "admin";
       return res.status(401).json({ message: "Please Login First!" });
     }
 
- 
+
     const decoded = jwt.verify(token, process.env.JWT_KEY);
 
     if (decoded.role !== expectedRole) {
